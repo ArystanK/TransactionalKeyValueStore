@@ -33,7 +33,7 @@ class MainViewModel(
         when (intent) {
             is ApplicationIntent.ExecuteOperationIntent -> {
                 val operation =
-                    OperationModel(intent.command, _uiState.value.commandKey, _uiState.value.commandValue) ?: return
+                    OperationModel(intent.command, uiState.value.commandKey, uiState.value.commandValue) ?: return
                 viewModelScope.launch {
                     operationsRepository.addOperation(operationModel = operation)
                 }
@@ -54,7 +54,7 @@ class MainViewModel(
                         )
                     }
 
-                    OperationModel.Commit -> if (_uiState.value.numberOfTransactions > 0) {
+                    OperationModel.Commit -> if (uiState.value.numberOfTransactions > 0) {
                         _uiState.update { state ->
                             val (last, previousTransactions) = state.transactions.pop()
                             state.copy(
@@ -104,14 +104,18 @@ class MainViewModel(
                     is OperationModel.Get -> _uiState.update { state ->
                         state.copy(
                             outputs = state.outputs + Output.Result(
-                                result = state.transactions.peek()?.state?.get(operation.key)
+                                result = state
+                                    .transactions
+                                    .peek()
+                                    ?.state
+                                    ?.get(operation.key)
                                     ?.let { UiText.Str(it) }
                                     ?: UiText.Res(Res.string.key_not_set)
                             )
                         )
                     }
 
-                    OperationModel.Rollback -> if (_uiState.value.numberOfTransactions > 0) {
+                    OperationModel.Rollback -> if (uiState.value.numberOfTransactions > 0) {
                         _uiState.update { state ->
                             state.copy(
                                 transactions = state.transactions.pop().second,
