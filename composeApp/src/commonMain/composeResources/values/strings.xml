@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Transactional Key Value Store</string>
+    <string name="get">GET</string>
+    <string name="set">SET</string>
+    <string name="delete">DELETE</string>
+    <string name="count">COUNT</string>
+    <string name="begin">BEGIN</string>
+    <string name="commit">COMMIT</string>
+    <string name="rollback">ROLLBACK</string>
+    <string name="key_not_set">key not set</string>
+    <string name="key">Key</string>
+    <string name="value">Value</string>
+    <string name="execute">Execute</string>
+    <string name="no_transaction">No transaction</string>
+</resources>
