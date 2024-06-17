@@ -1,4 +1,4 @@
-package kz.arctan.transactional_key_value_store.domain
+package kz.arctan.transactional_key_value_store.presentation
 
 import androidx.compose.runtime.Composable
 import org.jetbrains.compose.resources.StringResource
