@@ -29,3 +29,8 @@ fun <T> stackOf(vararg elements: T): PersistentStack<T> {
     elements.forEach { stack = stack.push(it) }
     return stack
 }
+
+fun <T> PersistentStack<T>.updateLast(transform: (T) -> T): PersistentStack<T> {
+    val (last, previousTransactions) = pop()
+    return last?.let { previousTransactions.push(transform(it)) } ?: this
+}
