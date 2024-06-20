@@ -5,15 +5,12 @@ import kz.arctan.transactional_key_value_store.domain.Transaction
 
 class GetValueUseCase {
     operator fun invoke(key: String, transactions: PersistentStack<Transaction>): String? =
-        transactions.find(key)
+        transactions.find { it.state.containsKey(key) }?.state?.get(key)
 }
 
-tailrec fun PersistentStack<Transaction>.find(key: String): String? {
+tailrec fun <T> PersistentStack<T>.find(predicate: (T) -> Boolean): T? {
     val (head, tail) = pop()
-    head?.let { it.state[key]?.let { return it } }
+    head?.let { if (predicate(it)) return it }
     if (tail is PersistentStack.Empty) return null
-    return tail.find(key)
+    return tail.find(predicate)
 }
-
-
-
