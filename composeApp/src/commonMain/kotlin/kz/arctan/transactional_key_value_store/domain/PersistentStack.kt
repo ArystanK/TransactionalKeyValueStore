@@ -43,23 +43,19 @@ fun <T> PersistentStack<T>.updateLast(transform: (T) -> T): PersistentStack<T> {
     return last?.let { previous.push(transform(it)) } ?: this
 }
 
-fun <T> PersistentStack<T>.forEach(f: (T) -> Unit) {
-    var stack = this
-    while (!stack.isEmpty()) {
-        val (head, tail) = pop()
-        head?.let(f)
-        stack = tail
-    }
+tailrec fun <T> PersistentStack<T>.forEach(f: (T) -> Unit) {
+    val (head, tail) = pop()
+    if (head == null) return
+    f(head)
+    return tail.forEach(f)
 }
 
-fun <T, R> PersistentStack<T>.map(f: (T?) -> R): PersistentStack<R> {
-    var stack = this
-    var result = emptyStack<R>()
-    while (!stack.isEmpty()) {
-        val (head, tail) = pop()
-        result = result.push(f(head))
-        stack = tail
-    }
-    return result
+tailrec fun <T, R> PersistentStack<T>.map(
+    f: (T) -> R,
+    result: PersistentStack<R> = emptyStack()
+): PersistentStack<R> {
+    val (head, tail) = pop()
+    if (head == null) return result
+    return tail.map(f, result.push(f(head)))
 }
 

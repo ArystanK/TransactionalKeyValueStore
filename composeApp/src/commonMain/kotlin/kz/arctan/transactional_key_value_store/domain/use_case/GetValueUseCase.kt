@@ -8,16 +8,11 @@ class GetValueUseCase {
         transactions.find(key)
 }
 
-fun PersistentStack<Transaction>.find(key: String): String? {
-    var stack = this
-    while (!stack.isEmpty()) {
-        val (head, tail) = pop()
-        head?.let { nonNullHead ->
-            nonNullHead.state[key]?.let { return it }
-        }
-        stack = tail
-    }
-    return null
+tailrec fun PersistentStack<Transaction>.find(key: String): String? {
+    val (head, tail) = pop()
+    head?.let { it.state[key]?.let { return it } }
+    if (tail is PersistentStack.Empty) return null
+    return tail.find(key)
 }
 
 
