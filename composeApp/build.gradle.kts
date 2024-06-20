@@ -32,6 +32,7 @@ kotlin {
 
     sourceSets {
         val desktopMain by getting
+        val commonTest by getting
 
         androidMain.dependencies {
             implementation(compose.preview)
@@ -52,12 +53,19 @@ kotlin {
             implementation(libs.navigation.compose)
             implementation(libs.koin.compose)
             implementation(libs.coroutines.core)
+            implementation(libs.kotlinx.collections.immutable)
             api(libs.koin.core)
+
+            implementation(libs.arrow.core)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.coroutines.core.jvm)
             implementation(libs.coroutines.swing)
+        }
+
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
         }
     }
 }

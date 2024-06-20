@@ -1,7 +1,15 @@
 package kz.arctan.transactional_key_value_store.domain
 
 sealed class PersistentStack<out T> {
-    internal class Empty<T> : PersistentStack<T>()
+    internal class Empty<T> : PersistentStack<T>() {
+        override fun equals(other: Any?): Boolean {
+            if (other is Empty<*>) return true
+            return super.equals(other)
+        }
+
+        override fun hashCode(): Int = 0
+    }
+
     internal data class Node<T>(
         val head: T,
         val tail: PersistentStack<T>
@@ -31,6 +39,27 @@ fun <T> stackOf(vararg elements: T): PersistentStack<T> {
 }
 
 fun <T> PersistentStack<T>.updateLast(transform: (T) -> T): PersistentStack<T> {
-    val (last, previousTransactions) = pop()
-    return last?.let { previousTransactions.push(transform(it)) } ?: this
+    val (last, previous) = pop()
+    return last?.let { previous.push(transform(it)) } ?: this
 }
+
+fun <T> PersistentStack<T>.forEach(f: (T) -> Unit) {
+    var stack = this
+    while (!stack.isEmpty()) {
+        val (head, tail) = pop()
+        head?.let(f)
+        stack = tail
+    }
+}
+
+fun <T, R> PersistentStack<T>.map(f: (T?) -> R): PersistentStack<R> {
+    var stack = this
+    var result = emptyStack<R>()
+    while (!stack.isEmpty()) {
+        val (head, tail) = pop()
+        result = result.push(f(head))
+        stack = tail
+    }
+    return result
+}
+

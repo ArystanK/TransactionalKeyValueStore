@@ -10,11 +10,11 @@ sealed interface UiText {
     data class Str(val string: String) : UiText
 
     data class Combined(val uiTextList: List<UiText>) : UiText
+}
 
-    @Composable
-    fun toText(): String = when (this) {
-        is Res -> stringResource(id)
-        is Str -> string
-        is Combined -> uiTextList.map { it.toText() }.joinToString("")
-    }
+@Composable
+fun UiText.toText(): String = when (this) {
+    is UiText.Res -> stringResource(id)
+    is UiText.Str -> string
+    is UiText.Combined -> uiTextList.map { it.toText() }.joinToString("")
 }
