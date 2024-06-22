@@ -19,12 +19,12 @@ import kz.arctan.transactional_key_value_store.domain.use_case.DeleteValueUseCas
 import kz.arctan.transactional_key_value_store.domain.use_case.GetTransactionsUseCase
 import kz.arctan.transactional_key_value_store.domain.use_case.GetValueUseCase
 import kz.arctan.transactional_key_value_store.domain.use_case.ParseCommandUseCase
+import kz.arctan.transactional_key_value_store.domain.utils.createUUID
 import kz.arctan.transactional_key_value_store.presentation.intent_handler.RollbackIntentHandler
 import kz.arctan.transactional_key_value_store.presentation.intent_handler.SetValueIntentHandler
 import transactionalkeyvaluestore.composeapp.generated.resources.Res
 import transactionalkeyvaluestore.composeapp.generated.resources.key_not_set
 import transactionalkeyvaluestore.composeapp.generated.resources.no_transaction
-import kotlin.random.Random
 
 class MainViewModel(
     private val commitTransactionUseCase: CommitTransactionUseCase,
@@ -53,7 +53,7 @@ class MainViewModel(
                             outputs = operations.map { operation ->
                                 Output.Operation(
                                     operationModel = operation,
-                                    key = Random.nextLong()
+                                    key = createUUID()
                                 )
                             }.toPersistentList()
                         )
@@ -80,7 +80,7 @@ class MainViewModel(
                                 state.copy(
                                     outputs = (state.outputs + Output.Operation(
                                         operationModel = operation,
-                                        key = Random.nextLong()
+                                        key = createUUID()
                                     )).toPersistentList()
                                 )
                             }
@@ -111,7 +111,7 @@ class MainViewModel(
                                             state.copy(
                                                 outputs = (state.outputs + Output.Result(
                                                     result = UiText.Res(Res.string.no_transaction),
-                                                    key = Random.nextLong()
+                                                    key = createUUID()
                                                 )).toPersistentList()
                                             )
                                         }
@@ -128,7 +128,7 @@ class MainViewModel(
                                         state.copy(
                                             outputs = (state.outputs + Output.Result(
                                                 result = UiText.Str(string = countResult),
-                                                key = Random.nextLong()
+                                                key = createUUID()
                                             )).toPersistentList()
                                         )
                                     }
@@ -153,7 +153,7 @@ class MainViewModel(
                                             outputs = (state.outputs + Output.Result(
                                                 result = value?.let { UiText.Str(it) }
                                                     ?: UiText.Res(Res.string.key_not_set),
-                                                key = Random.nextLong()
+                                                key = createUUID()
                                             )).toPersistentList(),
                                         )
                                     }

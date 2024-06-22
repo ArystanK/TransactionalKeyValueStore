@@ -1,6 +1,7 @@
 package kz.arctan.transactional_key_value_store.presentation
 
 import kz.arctan.transactional_key_value_store.domain.OperationModel
+import kz.arctan.transactional_key_value_store.domain.utils.MyUUID
 import transactionalkeyvaluestore.composeapp.generated.resources.Res
 import transactionalkeyvaluestore.composeapp.generated.resources.begin
 import transactionalkeyvaluestore.composeapp.generated.resources.commit
@@ -11,10 +12,10 @@ import transactionalkeyvaluestore.composeapp.generated.resources.rollback
 import transactionalkeyvaluestore.composeapp.generated.resources.set
 
 sealed interface Output {
-    data class Operation(val operationModel: OperationModel, override val key: Long) : Output
-    data class Result(val result: UiText, override val key: Long) : Output
+    data class Operation(val operationModel: OperationModel, override val key: MyUUID) : Output
+    data class Result(val result: UiText, override val key: MyUUID) : Output
 
-    val key: Long
+    val key: MyUUID
 }
 
 fun Output.toUiText(): UiText {

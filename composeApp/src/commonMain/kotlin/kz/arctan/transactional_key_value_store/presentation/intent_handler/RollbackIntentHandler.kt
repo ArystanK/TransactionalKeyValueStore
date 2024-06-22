@@ -1,12 +1,12 @@
 package kz.arctan.transactional_key_value_store.presentation.intent_handler
 
 import kotlinx.collections.immutable.toPersistentList
+import kz.arctan.transactional_key_value_store.domain.utils.createUUID
 import kz.arctan.transactional_key_value_store.presentation.ApplicationState
 import kz.arctan.transactional_key_value_store.presentation.Output
 import kz.arctan.transactional_key_value_store.presentation.UiText
 import transactionalkeyvaluestore.composeapp.generated.resources.Res
 import transactionalkeyvaluestore.composeapp.generated.resources.no_transaction
-import kotlin.random.Random
 
 class RollbackIntentHandler {
     operator fun invoke(
@@ -25,7 +25,7 @@ class RollbackIntentHandler {
                 state.copy(
                     outputs = (state.outputs + Output.Result(
                         result = UiText.Res(Res.string.no_transaction),
-                        key = Random.nextLong()
+                        key = createUUID()
                     )).toPersistentList()
                 )
             }

@@ -59,3 +59,9 @@ tailrec fun <T, R> PersistentStack<T>.map(
     return tail.map(f, result.push(f(head)))
 }
 
+tailrec fun <T> PersistentStack<T>.find(predicate: (T) -> Boolean): T? {
+    val (head, tail) = pop()
+    head?.let { if (predicate(it)) return it }
+    if (tail is PersistentStack.Empty) return null
+    return tail.find(predicate)
+}
