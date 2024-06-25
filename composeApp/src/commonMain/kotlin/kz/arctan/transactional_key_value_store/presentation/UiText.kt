@@ -1,9 +1,11 @@
 package kz.arctan.transactional_key_value_store.presentation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
+@Stable
 sealed interface UiText {
     data class Res(val id: StringResource) : UiText
 
